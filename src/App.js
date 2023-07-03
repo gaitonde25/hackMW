@@ -15,7 +15,7 @@ function App() {
           <Route path="/" exact element={<Login />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/interviewer" element={<Interviewer />} />
-          <Route path="/temp" element={<Candi />} />
+          <Route path="/candidate" element={<Candi />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </Router>
