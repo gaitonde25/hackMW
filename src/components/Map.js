@@ -96,7 +96,7 @@ const Map = () => {
       </Stack>
       <Button
         variant="contained"
-        sx={{ width: "25ch", position: "absolute", bottom: "50%", left: "2%" }}
+        sx={{ width: "25ch", position: "absolute", bottom: "40%", left: "3%" }}
       >
         Schedule
       </Button>

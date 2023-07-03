@@ -17,6 +17,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import Button from "@mui/material/Button";
 
 import Map from "./Map";
 import Schedule from "./Schedule";
@@ -96,9 +99,10 @@ export default function Admin() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Admin
           </Typography>
+          <Button color="inherit">Log out</Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -128,7 +132,7 @@ export default function Admin() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => setSelected("Schedule")}>
               <ListItemIcon>
-                <InboxIcon />
+                <CalendarMonthIcon />
               </ListItemIcon>
               <ListItemText primary={"Schedule"} />
             </ListItemButton>
@@ -144,7 +148,7 @@ export default function Admin() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => setSelected("candiList")}>
               <ListItemIcon>
-                <InboxIcon />
+                <RecentActorsIcon />
               </ListItemIcon>
               <ListItemText primary={"Candidates List"} />
             </ListItemButton>
@@ -152,7 +156,7 @@ export default function Admin() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => setSelected("intervList")}>
               <ListItemIcon>
-                <InboxIcon />
+                <RecentActorsIcon />
               </ListItemIcon>
               <ListItemText primary={"Interviewers List"} />
             </ListItemButton>

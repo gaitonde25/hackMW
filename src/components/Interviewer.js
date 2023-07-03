@@ -12,10 +12,26 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Slide from "@mui/material/Slide";
+import Badge from "@mui/material/Badge";
+
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const columns = [
-  { id: "time", label: "Time Slot", minWidth: 170 },
-  { id: "Interviews", label: "Interviews", minWidth: 100 },
+  {
+    id: "time",
+    label: "Time Slot",
+    minWidth: 170,
+  },
+  {
+    id: "Interviews",
+    label: "Interviews",
+    minWidth: 100,
+  },
   {
     id: "availability",
     label: "Availability",
@@ -57,82 +73,120 @@ export default function Interviewer() {
     setPage(0);
   };
   return (
-    <Stack direction="row" spacing={2}>
-      <Box sx={{ width: "50%", marginLeft: "5%" }}>
-        <Avatar
-          sx={{ margin: "10% 0 10% 20%", width: 150, height: 150 }}
-        ></Avatar>
-        <Stack direction="column" spacing={4}>
-          <Stack direction="row" spacing={4}>
-            <Item>Name</Item>
-            <Item>Track</Item>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Interviewer
+          </Typography>
+          <Button color="inherit">Log out</Button>
+        </Toolbar>
+      </AppBar>
+      <Stack direction="row" spacing={2}>
+        <Box sx={{ width: "50%", marginLeft: "5%" }}>
+          <div style={{ margin: "10% 0 10% 20%" }}>
+            <Badge badgeContent="  " color="primary">
+              <Avatar sx={{ width: 150, height: 150 }}></Avatar>
+            </Badge>
+          </div>
+          <Stack direction="column" spacing={4}>
+            <Stack direction="row" spacing={4}>
+              <Item>Name</Item>
+              <Item>Track</Item>
+            </Stack>
+            <Stack direction="row" spacing={4}>
+              <Item>Interviews taken</Item>
+              <Item>Interviews remaining</Item>
+            </Stack>
           </Stack>
-          <Stack direction="row" spacing={4}>
-            <Item>Interviews taken</Item>
-            <Item>Interviews remaining</Item>
-          </Stack>
-        </Stack>
-      </Box>
-      <div style={{ marginTop: "10%", width: "40%" }}>
-        <Paper
-          sx={{
-            width: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
+          <div
+            style={{
+              textAlign: "center",
+              backgroundColor: "grey",
+              borderRadius: "10px",
+              height: "25%",
+              width: "60%",
+              marginTop: "10%",
+            }}
+          >
+            <p style={{ marginBottom: "10%", fontFamily: "serif" }}>
+              Time Left for next interview{" "}
+            </p>
+            <Box component="span" sx={{ p: 2, border: "1px dashed red" }}>
+              45 mins
+            </Box>
+          </div>
+        </Box>
+        <div style={{ marginTop: "10%", width: "40%" }}>
+          <Paper
+            sx={{
+              width: "100%",
+              overflow: "hidden",
+            }}
+          >
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
                       >
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.format && typeof value === "number"
-                                ? column.format(value)
-                                : value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </div>
-    </Stack>
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.code}
+                        >
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {column.format && typeof value === "number"
+                                  ? column.format(value)
+                                  : value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </div>
+      </Stack>
+    </>
   );
 }
