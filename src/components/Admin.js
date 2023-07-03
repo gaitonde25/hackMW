@@ -24,6 +24,8 @@ import Button from "@mui/material/Button";
 import Map from "./Map";
 import Schedule from "./Schedule";
 import { Height } from "@mui/icons-material";
+import CandiList from "./CandiList";
+import IntrList from "./IntrList";
 
 const drawerWidth = 240;
 
@@ -167,8 +169,8 @@ export default function Admin() {
         <DrawerHeader />
         {selected === "Schedule" && <Schedule />}
         {selected === "Map" && <Map />}
-        {selected === "candiList" && <h1>Candidates List</h1>}
-        {selected === "intervList" && <h1>Interviewers List</h1>}
+        {selected === "candiList" && <CandiList />}
+        {selected === "intervList" && <IntrList />}
       </Main>
     </Box>
   );

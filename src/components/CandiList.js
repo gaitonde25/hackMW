@@ -44,34 +44,33 @@ const getName = (id) => {
   return Candidates.find((candidate) => candidate.ID === id).Name;
 };
 
-const columns = Array(31).fill({});
-columns[0] = { id: "time", label: "Time", minWidth: 170 };
-for (let i = 1; i < 31; i++) {
-  columns[i] = {
-    id: `Interviewer ${i}`,
-    label: Interviewers[i - 1].Name,
-    minWidth: 170,
+const columns = [
+  { id: "name", label: "Name", minWidth: 170 },
+  { id: "clg", label: "College", minWidth: 170 },
+  { id: "Track", label: "Track", minWidth: 170 },
+  { id: "status", label: "Status", minWidth: 170 },
+];
+
+const TrackMap = {
+  1: "Signal Processing",
+  2: "Control Systems",
+  3: "Embedded",
+  4: "VLSI",
+  5: "CS",
+};
+
+const candiLength = Candidates.length;
+const rows = Array(candiLength).fill({});
+Candidates.forEach((candidate, index) => {
+  rows[index] = {
+    name: candidate.Name,
+    clg: candidate.College,
+    Track: TrackMap[candidate.Track],
+    status: candidate.Status,
   };
-}
+});
 
-const rows = Array(32).fill({});
-
-for (let i = 0; i < 32; i++) {
-  rows[i] = {};
-  Interviewers.forEach((interviewer, index) => {
-    let candi = interviewer[`Free_${i + 1}`];
-    if (candi === 0) candi = "BUSY";
-    else if (candi === 1) candi = "FREE";
-    else candi = getName(candi);
-
-    rows[i][`Interviewer ${interviewer.ID}`] = candi;
-    rows[i][`time`] = timeSlots[i];
-  });
-}
-
-console.log(rows);
-
-export default function Schedule() {
+export default function CandiList() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -93,6 +92,7 @@ export default function Schedule() {
         maxHeight: "1000px",
       }}
     >
+      <h1>Candidates List </h1>
       <Paper sx={{ overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label="sticky table">

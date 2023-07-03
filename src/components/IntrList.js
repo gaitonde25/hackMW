@@ -9,7 +9,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Dialog from "./Dialog";
 import Interviewers from "../data/Interviewers.js";
-import Candidates from "../data/Candidates";
 
 const startTime = new Date();
 startTime.setHours(9, 0, 0); // Set start time to 9am
@@ -40,38 +39,51 @@ while (currentTime < endTime) {
   currentTime = new Date(currentTime.getTime() + interval * 60000);
 }
 
-const getName = (id) => {
-  return Candidates.find((candidate) => candidate.ID === id).Name;
+const columns = [
+  { id: "name", label: "Name", minWidth: 170 },
+  { id: "Track", label: "Track", minWidth: 170 },
+];
+
+const TrackMap = {
+  1: "Signal Processing",
+  2: "Control Systems",
+  3: "Embedded",
+  4: "VLSI",
+  5: "CS",
+  6: "Manager",
+  7: "HR",
 };
+const tracks = [];
 
-const columns = Array(31).fill({});
-columns[0] = { id: "time", label: "Time", minWidth: 170 };
-for (let i = 1; i < 31; i++) {
-  columns[i] = {
-    id: `Interviewer ${i}`,
-    label: Interviewers[i - 1].Name,
-    minWidth: 170,
-  };
-}
+Interviewers.forEach((interviewer) => {
+  let tracks_tenp = [];
+  if (interviewer.Track_1 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_1]);
+  if (interviewer.Track_2 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_2]);
+  if (interviewer.Track_3 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_3]);
+  if (interviewer.Track_4 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_4]);
+  if (interviewer.Track_5 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_5]);
+  tracks.push(tracks_tenp);
+});
 
-const rows = Array(32).fill({});
-
-for (let i = 0; i < 32; i++) {
-  rows[i] = {};
-  Interviewers.forEach((interviewer, index) => {
-    let candi = interviewer[`Free_${i + 1}`];
-    if (candi === 0) candi = "BUSY";
-    else if (candi === 1) candi = "FREE";
-    else candi = getName(candi);
-
-    rows[i][`Interviewer ${interviewer.ID}`] = candi;
-    rows[i][`time`] = timeSlots[i];
+const intrLength = Interviewers.length;
+const rows = Array(intrLength).fill({});
+Interviewers.forEach((interviewer, index) => {
+  let trac = "";
+  tracks[index].forEach((track) => {
+    trac += track + ", ";
   });
-}
+  rows[index] = {
+    name: interviewer.Name,
+    Track: trac.slice(0, -2),
+  };
+});
 
-console.log(rows);
-
-export default function Schedule() {
+export default function IntrList() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -93,6 +105,7 @@ export default function Schedule() {
         maxHeight: "1000px",
       }}
     >
+      <h1>Interviewers List </h1>
       <Paper sx={{ overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label="sticky table">

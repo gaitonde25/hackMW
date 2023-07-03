@@ -20,6 +20,34 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Candidates from "../data/Candidates";
+import Interviewers from "../data/Interviewers.js";
+
+const TrackMap = {
+  1: "Signal Processing",
+  2: "Control Systems",
+  3: "Embedded",
+  4: "VLSI",
+  5: "CS",
+  6: "Manager",
+  7: "HR",
+};
+const tracks = [];
+
+Interviewers.forEach((interviewer) => {
+  let tracks_tenp = [];
+  if (interviewer.Track_1 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_1]);
+  if (interviewer.Track_2 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_2]);
+  if (interviewer.Track_3 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_3]);
+  if (interviewer.Track_4 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_4]);
+  if (interviewer.Track_5 != null)
+    tracks_tenp.push(TrackMap[interviewer.Track_5]);
+  tracks.push(tracks_tenp);
+});
 
 const columns = [
   {
@@ -39,18 +67,66 @@ const columns = [
   },
 ];
 
+const startTime = new Date();
+startTime.setHours(9, 0, 0); // Set start time to 9am
+
+const endTime = new Date();
+endTime.setHours(17, 0, 0); // Set end time to 5pm
+
+// Define the time slot interval in minutes
+const interval = 15;
+
+// Create an array to store the time slots
+const timeSlots = [];
+
+// Loop through the time range and generate time slots
+let currentTime = startTime;
+while (currentTime < endTime) {
+  // Format the current time
+  const formattedTime = currentTime.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  // Add the formatted time to the time slots array
+  timeSlots.push(formattedTime);
+
+  // Increment the current time by the interval
+  currentTime = new Date(currentTime.getTime() + interval * 60000);
+}
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const getName = (id) => {
+  return Candidates.find((candidate) => candidate.ID === id).Name;
+};
 
 function createData(name, code, population, size) {
   const density = population / size;
   return { name, code, population, size, density };
 }
 
-const rows = [
-  { time: "9:00-9:30", Interviews: "Interviewer 1", availability: "Available" },
-];
+const rows = Array(32).fill({});
+for (let i = 0; i < 32; i++) {
+  rows[i] = {};
+  let candi = Interviewers[0][`Free_${i + 1}`];
+  let avail = "Scheduled";
+  if (candi === 0) {
+    candi = "";
+    avail = "BUSY";
+  } else if (candi === 1) {
+    candi = "";
+    avail = "FREE";
+  } else candi = getName(candi);
+
+  rows[i][`Interviews`] = candi;
+  rows[i][`time`] = timeSlots[i];
+  rows[i][`availability`] = avail;
+}
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -83,7 +159,7 @@ export default function Interviewer() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            {/* <MenuIcon /> */}
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Interviewer
@@ -100,8 +176,10 @@ export default function Interviewer() {
           </div>
           <Stack direction="column" spacing={4}>
             <Stack direction="row" spacing={4}>
-              <Item>Name</Item>
-              <Item>Track</Item>
+              <Item>{Interviewers[0][`Name`]}</Item>
+              <Item>
+                {tracks[0][0]}, {tracks[0][1]}
+              </Item>
             </Stack>
             <Stack direction="row" spacing={4}>
               <Item>Interviews taken</Item>
@@ -113,12 +191,25 @@ export default function Interviewer() {
               textAlign: "center",
               backgroundColor: "grey",
               borderRadius: "10px",
-              height: "25%",
+              height: "30%",
               width: "60%",
               marginTop: "10%",
             }}
           >
-            <p style={{ marginBottom: "10%", fontFamily: "serif" }}>
+            <p
+              style={{
+                marginBottom: "10%",
+                paddingTop: "10%",
+                fontFamily: "serif",
+                color: "white",
+                fontFamily: "Helvetica Neue, sansSerif",
+                fontSize: "40px",
+                fontWeight: "bold",
+                letterSpacing: "-1px",
+                lineHeight: "1",
+                textAlign: "center",
+              }}
+            >
               Time Left for next interview{" "}
             </p>
             <Box component="span" sx={{ p: 2, border: "1px dashed red" }}>

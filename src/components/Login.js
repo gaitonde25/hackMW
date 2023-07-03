@@ -43,9 +43,10 @@ const Login = () => {
       // const accessToken = response?.data?.token;
       // setAuth({ uname, password, accessToken });
       setAuth({ uname, password });
-      setUname("");
+
       setPassword("");
-      navigate("/admin");
+      if (uname == "admin") navigate("/admin");
+      else navigate("/interviewer");
     } catch (err) {
       console.log("error found ", err);
       alert("ERROR while logging-in");
@@ -99,15 +100,7 @@ const Login = () => {
           color: "#6c6763",
           paddingRight: "1rem",
         }}
-      >
-        New User ? Create a new account !{" "}
-        <Link
-          to={"./register"}
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
-          Register
-        </Link>
-      </p>
+      ></p>
       <Button onClick={(e) => handleSubmit(e)} variant="contained">
         Login
       </Button>
@@ -115,6 +108,16 @@ const Login = () => {
   );
   return (
     <section>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignContent: "center",
+          marginTop: "2rem",
+        }}
+      >
+        <img src="MathWorks.jpg"></img>
+      </div>
       <Container
         sx={{
           margin: "7rem auto",
